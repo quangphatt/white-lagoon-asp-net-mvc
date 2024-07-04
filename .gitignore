@@ -86,3 +86,6 @@ WhiteLagoon.Infrastructure/obj
 
 # Reference
 reference.txt
+
+# Migrations
+WhiteLagoon.Infrastructure/Migrations
