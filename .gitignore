@@ -89,3 +89,6 @@ reference.txt
 
 # Migrations
 WhiteLagoon.Infrastructure/Migrations
+
+# appsettings
+WhiteLagoon.Web/appsettings.json
