@@ -30,9 +30,17 @@ namespace WhiteLagoon.Infrastructure.Repository
             return dbSet.Any(filter);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = dbSet;
+            }
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
             if (filter != null)
             {
                 query = query.Where(filter);
@@ -49,27 +57,37 @@ namespace WhiteLagoon.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
-            if (filter != null)
+            IQueryable<T> query;
+            if (tracked)
             {
-                query = query.Where(filter);
+                query = dbSet;
             }
-            if (!string.IsNullOrEmpty(includeProperties))
+            else
             {
-                foreach (var includeProp in includeProperties
-                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                query = dbSet.AsNoTracking();
+            }
+            {
+                if (filter != null)
                 {
-                    query = query.Include(includeProp);
+                    query = query.Where(filter);
                 }
+                if (!string.IsNullOrEmpty(includeProperties))
+                {
+                    foreach (var includeProp in includeProperties
+                        .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Include(includeProp);
+                    }
+                }
+                return query.ToList();
             }
-            return query.ToList();
         }
 
         public void Remove(T entity)
         {
             dbSet.Remove(entity);
         }
-    }
+    } 
 }
