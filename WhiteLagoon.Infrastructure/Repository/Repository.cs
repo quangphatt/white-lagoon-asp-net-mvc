@@ -51,7 +51,7 @@ namespace WhiteLagoon.Infrastructure.Repository
                 foreach (var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(includeProp);
+                    query = query.Include(includeProp.Trim());
                 }
             }
             return query.FirstOrDefault();
@@ -78,7 +78,7 @@ namespace WhiteLagoon.Infrastructure.Repository
                     foreach (var includeProp in includeProperties
                         .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        query = query.Include(includeProp);
+                        query = query.Include(includeProp.Trim());
                     }
                 }
                 return query.ToList();
